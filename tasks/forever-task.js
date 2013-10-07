@@ -205,7 +205,7 @@ module.exports = function(grunt) {
 		paramsMatch =this.options().paramsMatch || {};
 		//default to match passed in options (if they exist)
 		if(paramsMatch.optionsMatch ===undefined) {
-			paramsMatch.optionsMatch =options;
+			paramsMatch.optionsMatch =foreverOpts;
 		}
 
       try {
