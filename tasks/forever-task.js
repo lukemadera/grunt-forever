@@ -73,6 +73,7 @@ function findProcessWithIndex( index, callback ) {
 				if(process.hasOwnProperty('options')) {
 					for(jj =0; jj<process.options.length; jj++) {
 						for(kk =0; kk<params.optionsMatch.length; kk++) {
+							log(process.options[jj]+' | '+params.optionsMatch[kk]);
 							if(process.options[jj].indexOf(params.optionsMatch[kk]) >-1) {
 								if(process.hasOwnProperty('uid')) {
 									uid =process.uid;
