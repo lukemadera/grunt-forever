@@ -1,4 +1,4 @@
-console.log('v10');
+console.log('v11');
 var forever     = require('forever'),
     path        = require('path'),
     logDir      = path.join(process.cwd(), '/forever'),
@@ -53,7 +53,7 @@ function prettyPrint( id, object ) {
 // function findProcessWithIndex( index, params, callback ) {
 function findProcessWithIndex( index, callback ) {
 	// console.log('paramsMatch: '+JSON.stringify(paramsMatch));
-	// var params =paramsMatch;
+	var params =paramsMatch;
 	/*
 	if(params ===undefined || !params) {
 		// console.log('no params or params undefined');
@@ -121,8 +121,6 @@ function stopOnProcess(index) {
   log( 'Attempting to stop ' + index + '...' );
 
   done = this.async();
-  console.log('paramsMatch: '+JSON.stringify(paramsMatch));
-  // findProcessWithIndex( index, paramsMatch, function(process, uid) {
   findProcessWithIndex( index, function(process) {
     if( typeof process !== 'undefined' ) {
       log( forever.format(true,[process]) );
@@ -157,8 +155,6 @@ function restartOnProcess( index ) {
   }(this, index));
 
   done = this.async();
-  console.log('paramsMatch: '+JSON.stringify(paramsMatch));
-  // findProcessWithIndex( index, paramsMatch, function(process, uid) {
   findProcessWithIndex( index, function(process) {
     if(typeof process !== 'undefined') {
       log(forever.format(true,[process]));
