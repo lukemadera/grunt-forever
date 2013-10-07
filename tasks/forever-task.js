@@ -1,4 +1,4 @@
-console.log('v1');
+console.log('v2');
 var forever     = require('forever'),
     path        = require('path'),
     logDir      = path.join(process.cwd(), '/forever'),
@@ -50,7 +50,8 @@ function prettyPrint( id, object ) {
 	@param {Array} optionsMatch Array of options to search through to try to match; each is a string
  * @param  {Function} callback Delegate method to invoke with either the found process object or undefined if not found.
  */
-function findProcessWithIndex( index, params, callback ) {
+// function findProcessWithIndex( index, params, callback ) {
+function findProcessWithIndex( index, callback ) {
   var i, jj, kk, process, uid =false;
   try {
     forever.list(false, function(context, list) {
@@ -64,12 +65,14 @@ function findProcessWithIndex( index, params, callback ) {
         process = undefined;
       }
 
-      callback.call(null, process, uid);
+      // callback.call(null, process, uid);
+	  callback.call(null, process);
     });
   }
   catch( e ) {
     error( 'Error in trying to find process ' + index + ' in forever. [REASON] :: ' + e.message );
-    callback.call(null, undefined, uid);
+    // callback.call(null, undefined, uid);
+	callback.call(null, undefined);
   }
 }
 /**
@@ -80,7 +83,8 @@ function startForeverWithIndex( index ) {
   log( 'Attempting to start ' + index + ' as daemon.');
 
   done = this.async();
-  findProcessWithIndex( index, paramsMatch, function(process, uid) {
+  // findProcessWithIndex( index, paramsMatch, function(process, uid) {
+  findProcessWithIndex( index, function(process) {
     // if found, be on our way without failing.
     if( typeof process !== 'undefined' ) {
       warn( index + ' is already running.');
@@ -111,7 +115,8 @@ function stopOnProcess(index) {
   log( 'Attempting to stop ' + index + '...' );
 
   done = this.async();
-  findProcessWithIndex( index, paramsMatch, function(process, uid) {
+  // findProcessWithIndex( index, paramsMatch, function(process, uid) {
+  findProcessWithIndex( index, function(process) {
     if( typeof process !== 'undefined' ) {
       log( forever.format(true,[process]) );
 
@@ -145,7 +150,8 @@ function restartOnProcess( index ) {
   }(this, index));
 
   done = this.async();
-  findProcessWithIndex( index, paramsMatch, function(process, uid) {
+  // findProcessWithIndex( index, paramsMatch, function(process, uid) {
+  findProcessWithIndex( index, function(process) {
     if(typeof process !== 'undefined') {
       log(forever.format(true,[process]));
 
