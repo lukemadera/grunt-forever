@@ -1,4 +1,4 @@
-console.log('v7');
+console.log('v8');
 var forever     = require('forever'),
     path        = require('path'),
     logDir      = path.join(process.cwd(), '/forever'),
@@ -50,8 +50,8 @@ function prettyPrint( id, object ) {
 	@param {Array} optionsMatch Array of options to search through to try to match; each is a string
  * @param  {Function} callback Delegate method to invoke with either the found process object or undefined if not found.
  */
-function findProcessWithIndex( index, params, callback ) {
-// function findProcessWithIndex( index, callback ) {
+// function findProcessWithIndex( index, params, callback ) {
+function findProcessWithIndex( index, callback ) {
 	if(!params || params ===undefined) {
 		// console.log('no params or params undefined');
 		params ={};
@@ -86,8 +86,8 @@ function startForeverWithIndex( index ) {
 
   done = this.async();
   console.log('paramsMatch: '+JSON.stringify(paramsMatch));
-  findProcessWithIndex( index, paramsMatch, function(process, uid) {
-  // findProcessWithIndex( index, function(process) {
+  // findProcessWithIndex( index, paramsMatch, function(process, uid) {
+  findProcessWithIndex( index, function(process) {
     // if found, be on our way without failing.
     if( typeof process !== 'undefined' ) {
       warn( index + ' is already running.');
@@ -119,8 +119,8 @@ function stopOnProcess(index) {
 
   done = this.async();
   console.log('paramsMatch: '+JSON.stringify(paramsMatch));
-  findProcessWithIndex( index, paramsMatch, function(process, uid) {
-  // findProcessWithIndex( index, function(process) {
+  // findProcessWithIndex( index, paramsMatch, function(process, uid) {
+  findProcessWithIndex( index, function(process) {
     if( typeof process !== 'undefined' ) {
       log( forever.format(true,[process]) );
 
@@ -155,8 +155,8 @@ function restartOnProcess( index ) {
 
   done = this.async();
   console.log('paramsMatch: '+JSON.stringify(paramsMatch));
-  findProcessWithIndex( index, paramsMatch, function(process, uid) {
-  // findProcessWithIndex( index, function(process) {
+  // findProcessWithIndex( index, paramsMatch, function(process, uid) {
+  findProcessWithIndex( index, function(process) {
     if(typeof process !== 'undefined') {
       log(forever.format(true,[process]));
 
