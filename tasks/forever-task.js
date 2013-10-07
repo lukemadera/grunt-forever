@@ -109,7 +109,6 @@ function startForeverWithIndex( index ) {
   log( 'Attempting to start ' + index + ' as daemon.');
 
   done = this.async();
-  console.log('paramsMatch: '+JSON.stringify(paramsMatch));
   // findProcessWithIndex( index, function(process, uid) {
   findProcessWithIndex( index, function(process) {
     // if found, be on our way without failing.
@@ -142,7 +141,6 @@ function stopOnProcess(index) {
   log( 'Attempting to stop ' + index + '...' );
 
   done = this.async();
-  console.log('paramsMatch: '+JSON.stringify(paramsMatch));
   // findProcessWithIndex( index, function(process, uid) {
   findProcessWithIndex( index, function(process) {
     if( typeof process !== 'undefined' ) {
@@ -181,7 +179,6 @@ function restartOnProcess( index ) {
   }(this, index));
 
   done = this.async();
-  console.log('paramsMatch: '+JSON.stringify(paramsMatch));
   // findProcessWithIndex( index, function(process, uid) {
   findProcessWithIndex( index, function(process) {
     if(typeof process !== 'undefined') {
