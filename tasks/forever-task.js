@@ -54,7 +54,7 @@ function prettyPrint( id, object ) {
 function findProcessWithIndex( index, callback ) {
 	//NOTE: apparently `console.log` can't be used here or it breaks things!? wtf??
 	// console.log('paramsMatch: '+JSON.stringify(paramsMatch));
-	// var params =paramsMatch;
+	var params =paramsMatch;
 	/*
 	if(params ===undefined || !params) {
 		// console.log('no params or params undefined');
