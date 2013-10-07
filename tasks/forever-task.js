@@ -66,18 +66,12 @@ function findProcessWithIndex( index, callback ) {
     forever.list(false, function(context, list) {
       i = list ? list.length : 0;
       while( --i > -1 ) {
-		if(found) {
-			break;
-		}
         process = list[i];
         if( process.hasOwnProperty('file') &&
           process.file === index ) {
 			if(params.optionsMatch !==undefined) {
 				if(process.hasOwnProperty('options')) {
 					for(jj =0; jj<process.options.length; jj++) {
-						if(found) {
-							break;
-						}
 						for(kk =0; kk<params.optionsMatch.length; kk++) {
 							log(process.options[jj]+' | '+params.optionsMatch[kk]);
 							if(process.options[jj].indexOf(params.optionsMatch[kk]) >-1) {
@@ -89,7 +83,13 @@ function findProcessWithIndex( index, callback ) {
 								break;
 							}
 						}
+						if(found) {
+							break;
+						}
 					}
+				}
+				if(found) {
+					break;
 				}
 			}
 			else {	//if no options to check, match on file is good enough
