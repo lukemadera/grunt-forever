@@ -181,7 +181,6 @@ function stopOnProcess(index) {
         });
     }
     else {
-		log('yes');
 		if(typeof process !== 'undefined') {
 			log( forever.format(true, [process]) );
 		}
@@ -228,6 +227,12 @@ function restartOnProcess( index ) {
       // done();		//do NOT do this - async so need to WAIT and listen for restart to actually fire first!
     }
     else {
+		if(typeof process !== 'undefined') {
+			log( forever.format(true, [process]) );
+		}
+		else {
+			log('forever process undefined');
+		}
       log(index + ' not found in list of processes in forever. Starting new instance...');
       startRequest();
       // done();		//do NOT do this - start will call done when it's done!
