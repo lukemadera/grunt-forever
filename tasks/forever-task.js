@@ -85,9 +85,9 @@ function findProcessWithIndex( index, callback ) {
 				// uid =process.uid;
 				// break;
 			// }
-			if(process.hasOwnProperty('uid')) {
-				uid =process.uid;
-			}
+			// if(process.hasOwnProperty('uid')) {
+				// uid =process.uid;
+			// }
 			break;
         }
         process = undefined;
