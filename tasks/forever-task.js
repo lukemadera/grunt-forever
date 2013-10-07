@@ -52,7 +52,7 @@ function prettyPrint( id, object ) {
  */
 // function findProcessWithIndex( index, params, callback ) {
 function findProcessWithIndex( index, callback ) {
-	if(!params || params ===undefined) {
+	if(params ===undefined || !params) {
 		// console.log('no params or params undefined');
 		params ={};
 	}
