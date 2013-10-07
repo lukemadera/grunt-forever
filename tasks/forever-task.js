@@ -3,6 +3,8 @@ var forever     = require('forever'),
     logDir      = path.join(process.cwd(), '/forever'),
     logFile     = path.join(logDir, '/out.log'),
     errFile     = path.join(logDir, '/err.log'),
+	options = [],
+	paramsMatch = {},
     commandName = 'node',
     commandMap  = {
       start:      startForeverWithIndex,
@@ -43,10 +45,12 @@ function prettyPrint( id, object ) {
 /**
  * Locates running process previously started by forever based on index file, and notifies callback. Will notify of undefined if not found, other wise the unformatted process object.
  * @param  {String}   index    Index filename.
+ @param {Object} params Additional parameters for identifying the process (in case have multiple with the same index / command)
+	@param {Array} optionsMatch Array of options to search through to try to match; each is a string
  * @param  {Function} callback Delegate method to invoke with either the found process object or undefined if not found.
  */
-function findProcessWithIndex( index, callback ) {
-  var i, process;
+function findProcessWithIndex( index, params, callback ) {
+  var i, jj, kk, process, uid =false;
   try {
     forever.list(false, function(context, list) {
       i = list ? list.length : 0;
@@ -54,12 +58,27 @@ function findProcessWithIndex( index, callback ) {
         process = list[i];
         if( process.hasOwnProperty('file') &&
           process.file === index ) {
-          break;
+			if(params.optionsMatch !==undefined) {
+				if(process.hasOwnProperty('options')) {
+					for(jj =0; jj<process.options.length; jj++) {
+						for(kk =0; kk<params.optionsMatch.length; kk++) {
+							if(process.options[jj].indexOf(params.optionsMatch[kk]) >-1) {
+								uid =process.uid;
+								break;
+							}
+						}
+					}
+				}
+			}
+			else {	//if no options to check, match on file is good enough
+				uid =process.uid;
+				break;
+			}
         }
         process = undefined;
       }
 
-      callback.call(null, process);
+      callback.call(null, process, uid);
     });
   }
   catch( e ) {
@@ -75,7 +94,7 @@ function startForeverWithIndex( index ) {
   log( 'Attempting to start ' + index + ' as daemon.');
 
   done = this.async();
-  findProcessWithIndex( index, function(process) {
+  findProcessWithIndex( index, paramsMatch, function(process, uid) {
     // if found, be on our way without failing.
     if( typeof process !== 'undefined' ) {
       warn( index + ' is already running.');
@@ -90,7 +109,8 @@ function startForeverWithIndex( index ) {
         outFile: logFile,
         command: commandName,
         append: true,
-        max: 3
+        max: 3,
+		options: options
       });
       log( 'Logs can be found at ' + logDir + '.' );
       done();
@@ -105,16 +125,17 @@ function stopOnProcess(index) {
   log( 'Attempting to stop ' + index + '...' );
 
   done = this.async();
-  findProcessWithIndex( index, function(process) {
+  findProcessWithIndex( index, paramsMatch, function(process, uid) {
     if( typeof process !== 'undefined' ) {
       log( forever.format(true,[process]) );
 
-      forever.stop( index )
+		// forever.stop( index )
+		forever.stop( uid )		//more specific
         .on('stop', function() {
           done();
         })
         .on('error', function(message) {
-          error( 'Error stopping ' + index + '. [REASON] :: ' + message );
+          error( 'Error stopping uid: ' + uid + 'index: ' + index + '. [REASON] :: ' + message );
           done(false);
         });
     }
@@ -139,13 +160,14 @@ function restartOnProcess( index ) {
   }(this, index));
 
   done = this.async();
-  findProcessWithIndex( index, function(process) {
+  findProcessWithIndex( index, paramsMatch, function(process, uid) {
     if(typeof process !== 'undefined') {
       log(forever.format(true,[process]));
 
-      forever.restart( index)
+		// forever.restart( index)
+		forever.restart(uid)		//more specific
         .on('error', function(message) {
-          error('Error restarting ' + index + '. [REASON] :: ' + message);
+          error('Error restarting uid: '+uid+' index: ' + index + '. [REASON] :: ' + message);
           done(false);
         });
       done();
@@ -176,6 +198,9 @@ module.exports = function(grunt) {
         logFile = path.join(logDir, this.options().logFile || 'out.log');
         errFile = path.join(logDir, this.options().errFile || 'err.log');
       }
+
+		options =this.options().options || [];
+		paramsMatch =this.options().paramsMatch || {};
 
       try {
         if(commandMap.hasOwnProperty(operation)) {
