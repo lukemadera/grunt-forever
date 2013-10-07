@@ -1,3 +1,4 @@
+console.log('orig');
 var forever     = require('forever'),
     path        = require('path'),
     logDir      = path.join(process.cwd(), '/forever'),
