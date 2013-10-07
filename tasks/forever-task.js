@@ -52,10 +52,12 @@ function prettyPrint( id, object ) {
  */
 // function findProcessWithIndex( index, params, callback ) {
 function findProcessWithIndex( index, callback ) {
+	/*
 	if(params ===undefined || !params) {
 		// console.log('no params or params undefined');
 		params ={};
 	}
+	*/
   var i, jj, kk, process, uid =false;
   try {
     forever.list(false, function(context, list) {
