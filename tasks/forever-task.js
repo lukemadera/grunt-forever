@@ -69,26 +69,30 @@ function findProcessWithIndex( index, callback ) {
         process = list[i];
         if( process.hasOwnProperty('file') &&
           process.file === index ) {
-			// if(params.optionsMatch !==undefined) {
-				// if(process.hasOwnProperty('options')) {
-					// for(jj =0; jj<process.options.length; jj++) {
-						// for(kk =0; kk<params.optionsMatch.length; kk++) {
-							// if(process.options[jj].indexOf(params.optionsMatch[kk]) >-1) {
-								// uid =process.uid;
-								// break;
-							// }
-						// }
-					// }
-				// }
-			// }
-			// else {	//if no options to check, match on file is good enough
-				// uid =process.uid;
-				// break;
-			// }
-			if(process.hasOwnProperty('uid')) {
-				uid =process.uid;
+			if(params.optionsMatch !==undefined) {
+				if(process.hasOwnProperty('options')) {
+					for(jj =0; jj<process.options.length; jj++) {
+						for(kk =0; kk<params.optionsMatch.length; kk++) {
+							if(process.options[jj].indexOf(params.optionsMatch[kk]) >-1) {
+								if(process.hasOwnProperty('uid')) {
+									uid =process.uid;
+								}
+								break;
+							}
+						}
+					}
+				}
 			}
-			break;
+			else {	//if no options to check, match on file is good enough
+				if(process.hasOwnProperty('uid')) {
+					uid =process.uid;
+				}
+				break;
+			}
+			// if(process.hasOwnProperty('uid')) {
+				// uid =process.uid;
+			// }
+			// break;
         }
         process = undefined;
       }
