@@ -1,4 +1,4 @@
-console.log('v9');
+console.log('v10');
 var forever     = require('forever'),
     path        = require('path'),
     logDir      = path.join(process.cwd(), '/forever'),
@@ -53,7 +53,7 @@ function prettyPrint( id, object ) {
 // function findProcessWithIndex( index, params, callback ) {
 function findProcessWithIndex( index, callback ) {
 	console.log('paramsMatch: '+JSON.stringify(paramsMatch));
-	var params =paramsMatch;
+	// var params =paramsMatch;
 	/*
 	if(params ===undefined || !params) {
 		// console.log('no params or params undefined');
