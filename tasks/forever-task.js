@@ -161,6 +161,9 @@ function stopOnProcess(index) {
     }
     else {
       gruntRef.warn( index + ' not found in list of processes in forever.' );
+		if(typeof process !== 'undefined') {
+			log( forever.format(true, [process]) );
+		}
       done();
     }
   });
