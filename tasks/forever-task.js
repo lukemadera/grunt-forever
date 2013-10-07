@@ -1,4 +1,4 @@
-console.log('v2');
+console.log('v3');
 var forever     = require('forever'),
     path        = require('path'),
     logDir      = path.join(process.cwd(), '/forever'),
@@ -65,14 +65,12 @@ function findProcessWithIndex( index, callback ) {
         process = undefined;
       }
 
-      // callback.call(null, process, uid);
-	  callback.call(null, process);
+      callback.call(null, process, uid);
     });
   }
   catch( e ) {
     error( 'Error in trying to find process ' + index + ' in forever. [REASON] :: ' + e.message );
-    // callback.call(null, undefined, uid);
-	callback.call(null, undefined);
+    callback.call(null, undefined, uid);
   }
 }
 /**
