@@ -85,7 +85,7 @@ function findProcessWithIndex( index, params, callback ) {
   }
   catch( e ) {
     error( 'Error in trying to find process ' + index + ' in forever. [REASON] :: ' + e.message );
-    callback.call(null, undefined);
+    callback.call(null, undefined, uid);
   }
 }
 /**

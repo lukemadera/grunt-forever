@@ -52,6 +52,7 @@ function prettyPrint( id, object ) {
  */
 // function findProcessWithIndex( index, params, callback ) {
 function findProcessWithIndex( index, callback ) {
+	//NOTE: apparently `console.log` can't be used here or it breaks things!? wtf??
 	// console.log('paramsMatch: '+JSON.stringify(paramsMatch));
 	var params =paramsMatch;
 	/*
@@ -68,7 +69,24 @@ function findProcessWithIndex( index, callback ) {
         process = list[i];
         if( process.hasOwnProperty('file') &&
           process.file === index ) {
-          break;
+			// if(params.optionsMatch !==undefined) {
+				// if(process.hasOwnProperty('options')) {
+					// for(jj =0; jj<process.options.length; jj++) {
+						// for(kk =0; kk<params.optionsMatch.length; kk++) {
+							// if(process.options[jj].indexOf(params.optionsMatch[kk]) >-1) {
+								// uid =process.uid;
+								// break;
+							// }
+						// }
+					// }
+				// }
+			// }
+			// else {	//if no options to check, match on file is good enough
+				// uid =process.uid;
+				// break;
+			// }
+			uid =process.uid;
+			break;
         }
         process = undefined;
       }
@@ -89,8 +107,7 @@ function startForeverWithIndex( index ) {
   log( 'Attempting to start ' + index + ' as daemon.');
 
   done = this.async();
-  // findProcessWithIndex( index, paramsMatch, function(process, uid) {
-  findProcessWithIndex( index, function(process) {
+  findProcessWithIndex( index, function(process, uid) {
     // if found, be on our way without failing.
     if( typeof process !== 'undefined' ) {
       warn( index + ' is already running.');
@@ -121,16 +138,19 @@ function stopOnProcess(index) {
   log( 'Attempting to stop ' + index + '...' );
 
   done = this.async();
-  findProcessWithIndex( index, function(process) {
+  findProcessWithIndex( index, function(process, uid) {
     if( typeof process !== 'undefined' ) {
+	// if( typeof process !== 'undefined' && uid ) {
       log( forever.format(true,[process]) );
 
       forever.stop( index )
+	  // forever.stop( uid )		//more specific
         .on('stop', function() {
           done();
         })
         .on('error', function(message) {
-          error( 'Error stopping ' + index + '. [REASON] :: ' + message );
+          // error( 'Error stopping ' + index + '. [REASON] :: ' + message );
+		  error( 'Error stopping uid: ' + uid + 'index: ' + index + '. [REASON] :: ' + message );
           done(false);
         });
     }
@@ -155,13 +175,16 @@ function restartOnProcess( index ) {
   }(this, index));
 
   done = this.async();
-  findProcessWithIndex( index, function(process) {
+  findProcessWithIndex( index, function(process, uid) {
     if(typeof process !== 'undefined') {
+	// if(typeof process !== 'undefined' && uid) {
       log(forever.format(true,[process]));
 
       forever.restart( index)
+	  // forever.restart(uid)		//more specific
         .on('error', function(message) {
-          error('Error restarting ' + index + '. [REASON] :: ' + message);
+          // error('Error restarting ' + index + '. [REASON] :: ' + message);
+		  error('Error restarting uid: '+uid+' index: ' + index + '. [REASON] :: ' + message);
           done(false);
         });
       done();
