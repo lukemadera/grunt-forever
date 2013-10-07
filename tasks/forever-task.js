@@ -85,18 +85,22 @@ function findProcessWithIndex( index, callback ) {
 				// uid =process.uid;
 				// break;
 			// }
-			uid =process.uid;
+			if(process.hasOwnProperty('uid')) {
+				uid =process.uid;
+			}
 			break;
         }
         process = undefined;
       }
 
-      callback.call(null, process, uid);
+      // callback.call(null, process, uid);
+	  callback.call(null, process);
     });
   }
   catch( e ) {
     error( 'Error in trying to find process ' + index + ' in forever. [REASON] :: ' + e.message );
-    callback.call(null, undefined, uid);
+    // callback.call(null, undefined, uid);
+	callback.call(null, undefined);
   }
 }
 /**
@@ -107,7 +111,8 @@ function startForeverWithIndex( index ) {
   log( 'Attempting to start ' + index + ' as daemon.');
 
   done = this.async();
-  findProcessWithIndex( index, function(process, uid) {
+  // findProcessWithIndex( index, function(process, uid) {
+  findProcessWithIndex( index, function(process) {
     // if found, be on our way without failing.
     if( typeof process !== 'undefined' ) {
       warn( index + ' is already running.');
@@ -138,7 +143,8 @@ function stopOnProcess(index) {
   log( 'Attempting to stop ' + index + '...' );
 
   done = this.async();
-  findProcessWithIndex( index, function(process, uid) {
+  // findProcessWithIndex( index, function(process, uid) {
+  findProcessWithIndex( index, function(process) {
     if( typeof process !== 'undefined' ) {
 	// if( typeof process !== 'undefined' && uid ) {
       log( forever.format(true,[process]) );
@@ -149,8 +155,8 @@ function stopOnProcess(index) {
           done();
         })
         .on('error', function(message) {
-          // error( 'Error stopping ' + index + '. [REASON] :: ' + message );
-		  error( 'Error stopping uid: ' + uid + 'index: ' + index + '. [REASON] :: ' + message );
+          error( 'Error stopping ' + index + '. [REASON] :: ' + message );
+		  // error( 'Error stopping uid: ' + uid + 'index: ' + index + '. [REASON] :: ' + message );
           done(false);
         });
     }
@@ -175,7 +181,8 @@ function restartOnProcess( index ) {
   }(this, index));
 
   done = this.async();
-  findProcessWithIndex( index, function(process, uid) {
+  // findProcessWithIndex( index, function(process, uid) {
+  findProcessWithIndex( index, function(process) {
     if(typeof process !== 'undefined') {
 	// if(typeof process !== 'undefined' && uid) {
       log(forever.format(true,[process]));
@@ -183,8 +190,8 @@ function restartOnProcess( index ) {
       forever.restart( index)
 	  // forever.restart(uid)		//more specific
         .on('error', function(message) {
-          // error('Error restarting ' + index + '. [REASON] :: ' + message);
-		  error('Error restarting uid: '+uid+' index: ' + index + '. [REASON] :: ' + message);
+          error('Error restarting ' + index + '. [REASON] :: ' + message);
+		  // error('Error restarting uid: '+uid+' index: ' + index + '. [REASON] :: ' + message);
           done(false);
         });
       done();
