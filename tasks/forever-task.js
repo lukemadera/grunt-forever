@@ -1,4 +1,4 @@
-console.log('v8');
+console.log('v9');
 var forever     = require('forever'),
     path        = require('path'),
     logDir      = path.join(process.cwd(), '/forever'),
@@ -52,6 +52,8 @@ function prettyPrint( id, object ) {
  */
 // function findProcessWithIndex( index, params, callback ) {
 function findProcessWithIndex( index, callback ) {
+	console.log('paramsMatch: '+JSON.stringify(paramsMatch));
+	var params =paramsMatch;
 	/*
 	if(params ===undefined || !params) {
 		// console.log('no params or params undefined');
@@ -87,7 +89,6 @@ function startForeverWithIndex( index ) {
   log( 'Attempting to start ' + index + ' as daemon.');
 
   done = this.async();
-  console.log('paramsMatch: '+JSON.stringify(paramsMatch));
   // findProcessWithIndex( index, paramsMatch, function(process, uid) {
   findProcessWithIndex( index, function(process) {
     // if found, be on our way without failing.
