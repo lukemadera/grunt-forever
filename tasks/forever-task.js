@@ -141,20 +141,20 @@ function stopOnProcess(index) {
   log( 'Attempting to stop ' + index + '...' );
 
   done = this.async();
-  // findProcessWithIndex( index, function(process, uid) {
-  findProcessWithIndex( index, function(process) {
-    if( typeof process !== 'undefined' ) {
-	// if( typeof process !== 'undefined' && uid ) {
+  findProcessWithIndex( index, function(process, uid) {
+  // findProcessWithIndex( index, function(process) {
+	if( typeof process !== 'undefined' && uid ) {
+    // if( typeof process !== 'undefined' ) {
       log( forever.format(true,[process]) );
 
-      forever.stop( index )
-	  // forever.stop( uid )		//more specific
+	  forever.stop( uid )		//more specific
+      // forever.stop( index )
         .on('stop', function() {
           done();
         })
         .on('error', function(message) {
-          error( 'Error stopping ' + index + '. [REASON] :: ' + message );
-		  // error( 'Error stopping uid: ' + uid + 'index: ' + index + '. [REASON] :: ' + message );
+			error( 'Error stopping uid: ' + uid + 'index: ' + index + '. [REASON] :: ' + message );
+          // error( 'Error stopping ' + index + '. [REASON] :: ' + message );
           done(false);
         });
     }
@@ -179,17 +179,17 @@ function restartOnProcess( index ) {
   }(this, index));
 
   done = this.async();
-  // findProcessWithIndex( index, function(process, uid) {
-  findProcessWithIndex( index, function(process) {
-    if(typeof process !== 'undefined') {
-	// if(typeof process !== 'undefined' && uid) {
+  findProcessWithIndex( index, function(process, uid) {
+  // findProcessWithIndex( index, function(process) {
+	if(typeof process !== 'undefined' && uid) {
+    // if(typeof process !== 'undefined') {
       log(forever.format(true,[process]));
 
-      forever.restart( index)
-	  // forever.restart(uid)		//more specific
+	  forever.restart(uid)		//more specific
+      // forever.restart( index)
         .on('error', function(message) {
-          error('Error restarting ' + index + '. [REASON] :: ' + message);
-		  // error('Error restarting uid: '+uid+' index: ' + index + '. [REASON] :: ' + message);
+			error('Error restarting uid: '+uid+' index: ' + index + '. [REASON] :: ' + message);
+          // error('Error restarting ' + index + '. [REASON] :: ' + message);
           done(false);
         });
       done();
