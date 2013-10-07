@@ -164,6 +164,9 @@ function stopOnProcess(index) {
 		if(typeof process !== 'undefined') {
 			log( forever.format(true, [process]) );
 		}
+		else {
+			log('forever process undefined');
+		}
       done();
     }
   });
