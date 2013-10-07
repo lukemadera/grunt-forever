@@ -1,4 +1,4 @@
-console.log('v11');
+console.log('v12');
 var forever     = require('forever'),
     path        = require('path'),
     logDir      = path.join(process.cwd(), '/forever'),
@@ -160,14 +160,15 @@ function stopOnProcess(index) {
         });
     }
     else {
-      gruntRef.warn( index + ' not found in list of processes in forever.' );
+		log('yes');
 		if(typeof process !== 'undefined') {
 			log( forever.format(true, [process]) );
 		}
 		else {
 			log('forever process undefined');
 		}
-      done();
+		gruntRef.warn( index + ' not found in list of processes in forever.' );
+		done();
     }
   });
 }
