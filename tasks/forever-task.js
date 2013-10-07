@@ -1,4 +1,4 @@
-console.log('v12');
+console.log('v13');
 var forever     = require('forever'),
     path        = require('path'),
     logDir      = path.join(process.cwd(), '/forever'),
@@ -128,9 +128,17 @@ function startForeverWithIndex( index ) {
         append: true,
         max: 3,
 		options: foreverOpts
-      });
+      })
+		.on('start', function() {
+			done();
+		})
+		.on('error', function(message) {
+			error( 'Error starting ' + index + '. [REASON] :: ' + message );
+			done(false);
+		})
+	  ;
       log( 'Logs can be found at ' + logDir + '.' );
-      done();
+      // done();		//async so don't complete until it actually starts (or errors)
     }
   });
 }
