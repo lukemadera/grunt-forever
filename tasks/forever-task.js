@@ -113,7 +113,8 @@ function startForeverWithIndex( index ) {
   findProcessWithIndex( index, function(process) {
     // if found, be on our way without failing.
     if( typeof process !== 'undefined' ) {
-      warn( index + ' is already running.');
+      // warn( index + ' is already running.');
+	  log( index + ' is already running.');		//not necessarily an error so don't want to abort
       log( forever.format(true, [process]) );
       done();
     }
