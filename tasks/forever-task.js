@@ -138,7 +138,7 @@ function startForeverWithIndex( index ) {
 		})
 	  ;
       log( 'Logs can be found at ' + logDir + '.' );
-      // done();		//async so don't complete until it actually starts (or errors)
+      // done();		//async so don't complete until it actually starts (or errors) - this created a bug where it would complete before forever was actually started sometimes - it was sporadic since it was due to timing so was a hard error to track down!
     }
   });
 }
@@ -207,13 +207,17 @@ function restartOnProcess( index ) {
 			error('Error restarting uid: '+uid+' index: ' + index + '. [REASON] :: ' + message);
           // error('Error restarting ' + index + '. [REASON] :: ' + message);
           done(false);
-        });
-      done();
+        })
+		.on('restart', function() {
+			done();
+		})
+		;
+      // done();		//do NOT do this - async so need to WAIT and listen for restart to actually fire first!
     }
     else {
       log(index + ' not found in list of processes in forever. Starting new instance...');
       startRequest();
-      done();
+      // done();		//do NOT do this - start will call done when it's done!
     }
   });
 }
